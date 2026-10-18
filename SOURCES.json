@@ -168,39 +168,6 @@
     "gitlinks": []
   },
   {
-    "original_number": 54,
-    "project": "web-dev-projects",
-    "source": "https://github.com/irrssue/web-dev-projects",
-    "source_commit": "0ab7373796f7975eeaf4433e32b5bb2cf2c119bb",
-    "file_count": 22,
-    "gitlinks": [
-      {
-        "path": "css-card",
-        "commit": "7b615bc5dad9af4d39dc18a61da9c1cd22468a58"
-      },
-      {
-        "path": "firstwebsmolproject",
-        "commit": "85484ef0c92c3032f76ef574d3fc54587b7673c5"
-      },
-      {
-        "path": "freecodecamp-certificate-project",
-        "commit": "a4c55c75650a9382b5f08a3b54f76ca50bae6ecf"
-      },
-      {
-        "path": "momentum-clone",
-        "commit": "436799b1a718fe73d1867c65bc477d81973dacc2"
-      },
-      {
-        "path": "pomofocus.io-clone",
-        "commit": "4717234a9f5031e0a3687d9735c0c1f9848688c0"
-      },
-      {
-        "path": "sample-webpage",
-        "commit": "d6d3ac73abf9636c8fc9652944fc8381c423cfca"
-      }
-    ]
-  },
-  {
     "original_number": 58,
     "project": "YouTube-subscribers-count",
     "source": "https://github.com/irrssue/YouTube-subscribers-count",
