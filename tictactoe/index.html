@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tic Tac Toe</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #d4aa39;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: sans-serif;
+      gap: 20px;
+      padding-bottom: 160px;
+    }
+
+    h1 {
+      color: #000;
+      font-size: 2rem;
+      letter-spacing: 2px;
+    }
+
+    #game-area {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .player-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .player-label {
+      font-size: 1rem;
+      font-weight: bold;
+      color: #000;
+      letter-spacing: 1px;
+    }
+
+    .player-symbol {
+      width: 80px;
+      height: 80px;
+      border: 4px solid #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.8rem;
+      font-weight: bold;
+      border-radius: 6px;
+    }
+
+    #player-x .player-symbol { color: #000; }
+    #player-o .player-symbol { color: #fff; }
+
+.player-panel.active .player-symbol {
+      background-color: rgba(0,0,0,0.15);
+      box-shadow: 0 0 0 3px #000;
+    }
+
+    #board-wrapper {
+      position: relative;
+      width: 360px;
+      height: 360px;
+    }
+
+    #board {
+      display: grid;
+      grid-template-columns: repeat(3, 120px);
+      grid-template-rows: repeat(3, 120px);
+      background-color: transparent;
+      width: 360px;
+      height: 360px;
+    }
+
+    .cell {
+      background-color: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      font-weight: bold;
+      cursor: pointer;
+      border: 4px solid #000;
+      transition: background-color 0.15s;
+    }
+
+    .cell:hover:not(.taken) {
+      background-color: rgba(0, 0, 0, 0.08);
+    }
+
+    .cell.x { color: #000; }
+    .cell.o { color: #fff; }
+
+    #win-line {
+      position: absolute;
+      background-color: #000;
+      border-radius: 4px;
+      transform-origin: left center;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    #win-line.show { opacity: 1; }
+
+    #status {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #000;
+      min-height: 1.6rem;
+    }
+
+    #restart {
+      padding: 10px 28px;
+      font-size: 1rem;
+      font-weight: bold;
+      background-color: #000;
+      color: #d4aa39;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    #restart:hover { background-color: #222; }
+
+    #overall-winner {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    #overall-winner.show { display: flex; }
+
+    #winner-box {
+      background: #d4aa39;
+      border: 4px solid #000;
+      border-radius: 12px;
+      padding: 40px 60px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    #winner-box h2 {
+      font-size: 2.2rem;
+      color: #000;
+    }
+
+    #winner-box button {
+      padding: 12px 32px;
+      font-size: 1rem;
+      font-weight: bold;
+      background: #000;
+      color: #d4aa39;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    /* Fox walker */
+    #fox-container {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 160px;
+      pointer-events: none;
+      z-index: 100;
+      overflow: hidden;
+    }
+
+    #fox {
+      position: absolute;
+      bottom: 0;
+      width: 150px;
+      height: 150px;
+    }
+
+    @keyframes walk-right {
+      0%   { left: -90px; }
+      100% { left: calc(100vw + 10px); }
+    }
+    @keyframes walk-left {
+      0%   { left: calc(100vw + 10px); }
+      100% { left: -90px; }
+    }
+
+    #fox.going-right { animation: walk-right 8s linear; }
+    #fox.going-left  {
+      animation: walk-left 8s linear;
+      transform: scaleX(-1);
+    }
+
+    /* Fox body leg bob */
+    @keyframes leg-bob {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-4px); }
+    }
+    #fox svg { animation: leg-bob 0.35s ease-in-out infinite; }
+
+  </style>
+</head>
+<body>
+  <h1>TIC TAC TOE</h1>
+
+  <div id="game-area">
+    <!-- Player X -->
+    <div class="player-panel active" id="player-x">
+      <div class="player-label">PLAYER X</div>
+      <div class="player-symbol" id="score-x">0</div>
+    </div>
+
+    <!-- Board -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:16px;">
+      <div id="board-wrapper">
+        <div id="board">
+          <div class="cell" data-index="0"></div>
+          <div class="cell" data-index="1"></div>
+          <div class="cell" data-index="2"></div>
+          <div class="cell" data-index="3"></div>
+          <div class="cell" data-index="4"></div>
+          <div class="cell" data-index="5"></div>
+          <div class="cell" data-index="6"></div>
+          <div class="cell" data-index="7"></div>
+          <div class="cell" data-index="8"></div>
+        </div>
+        <div id="win-line"></div>
+      </div>
+      <div id="status">Player X's turn</div>
+      <button id="restart">Next Round</button>
+    </div>
+
+    <!-- Player O -->
+    <div class="player-panel" id="player-o">
+      <div class="player-label">PLAYER O</div>
+      <div class="player-symbol" id="score-o">0</div>
+    </div>
+  </div>
+
+
+  <!-- Fox walker -->
+  <div id="fox-container">
+    <div id="fox">
+      <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+        <!-- Tail -->
+        <ellipse cx="18" cy="52" rx="14" ry="9" fill="#c87137" transform="rotate(-30 18 52)"/>
+        <ellipse cx="14" cy="44" rx="6" ry="4" fill="#f5f0e8" transform="rotate(-30 14 44)"/>
+        <!-- Body -->
+        <ellipse cx="44" cy="50" rx="18" ry="14" fill="#d4753d"/>
+        <!-- White belly -->
+        <ellipse cx="46" cy="54" rx="10" ry="8" fill="#f5f0e8"/>
+        <!-- Head -->
+        <ellipse cx="58" cy="36" rx="14" ry="12" fill="#d4753d"/>
+        <!-- Ears -->
+        <polygon points="50,26 45,14 56,22" fill="#d4753d"/>
+        <polygon points="52,25 48,16 57,22" fill="#c0392b"/>
+        <polygon points="64,24 68,13 72,24" fill="#d4753d"/>
+        <polygon points="65,24 68,15 71,24" fill="#c0392b"/>
+        <!-- Face white -->
+        <ellipse cx="60" cy="41" rx="8" ry="6" fill="#f5f0e8"/>
+        <!-- Eyes -->
+        <circle cx="56" cy="33" r="2.5" fill="#222"/>
+        <circle cx="55.2" cy="32.2" r="0.7" fill="#fff"/>
+        <!-- Nose -->
+        <ellipse cx="63" cy="39" rx="2.5" ry="1.5" fill="#222"/>
+        <!-- Legs -->
+        <rect x="36" y="60" width="7" height="14" rx="3" fill="#c87137" class="leg-back-left"/>
+        <rect x="46" y="61" width="7" height="13" rx="3" fill="#c87137" class="leg-back-right"/>
+        <rect x="54" y="58" width="7" height="14" rx="3" fill="#c87137" class="leg-front-left"/>
+        <rect x="62" y="60" width="7" height="12" rx="3" fill="#c87137" class="leg-front-right"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Overall winner overlay -->
+  <div id="overall-winner">
+    <div id="winner-box">
+      <h2 id="winner-text"></h2>
+      <button id="new-game">New Game</button>
+    </div>
+  </div>
+
+  <script>
+    const cells = document.querySelectorAll('.cell');
+    const status = document.getElementById('status');
+    const restartBtn = document.getElementById('restart');
+    const winLine = document.getElementById('win-line');
+    const scoreX = document.getElementById('score-x');
+    const scoreO = document.getElementById('score-o');
+    const panelX = document.getElementById('player-x');
+    const panelO = document.getElementById('player-o');
+    const overallWinner = document.getElementById('overall-winner');
+    const winnerText = document.getElementById('winner-text');
+    const newGameBtn = document.getElementById('new-game');
+
+    let board = Array(9).fill(null);
+    let current = 'X';
+    let gameOver = false;
+    let scores = { X: 0, O: 0 };
+
+    const winCombos = [
+      [0,1,2],[3,4,5],[6,7,8],
+      [0,3,6],[1,4,7],[2,5,8],
+      [0,4,8],[2,4,6]
+    ];
+
+    function cellCenter(i) {
+      return { x: (i % 3) * 120 + 60, y: Math.floor(i / 3) * 120 + 60 };
+    }
+
+    function drawWinLine(a, c) {
+      const s = cellCenter(a), e = cellCenter(c);
+      const dx = e.x - s.x, dy = e.y - s.y;
+      const len = Math.sqrt(dx*dx + dy*dy);
+      const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+      winLine.style.width = len + 'px';
+      winLine.style.height = '6px';
+      winLine.style.left = s.x + 'px';
+      winLine.style.top = s.y + 'px';
+      winLine.style.transform = `translateY(-50%) rotate(${angle}deg)`;
+      winLine.classList.add('show');
+    }
+
+    function checkWinner() {
+      for (const [a,b,c] of winCombos) {
+        if (board[a] && board[a] === board[b] && board[a] === board[c])
+          return { winner: board[a], combo: [a,b,c] };
+      }
+      return board.every(Boolean) ? { winner: 'Draw', combo: null } : null;
+    }
+
+    function setActivePanel(player) {
+      panelX.classList.toggle('active', player === 'X');
+      panelO.classList.toggle('active', player === 'O');
+    }
+
+    cells.forEach(cell => {
+      cell.addEventListener('click', () => {
+        const i = +cell.dataset.index;
+        if (gameOver || board[i]) return;
+
+        board[i] = current;
+        cell.textContent = current;
+        cell.classList.add(current.toLowerCase(), 'taken');
+
+        const result = checkWinner();
+        if (result) {
+          gameOver = true;
+          if (result.winner === 'Draw') {
+            status.textContent = "It's a draw!";
+          } else {
+            scores[result.winner]++;
+            scoreX.textContent = scores.X;
+            scoreO.textContent = scores.O;
+            status.textContent = `Player ${result.winner} wins this round!`;
+            drawWinLine(result.combo[0], result.combo[2]);
+
+            if (scores[result.winner] >= 3) {
+              setTimeout(() => {
+                winnerText.textContent = `Player ${result.winner} wins the game!`;
+                overallWinner.classList.add('show');
+              }, 600);
+            }
+          }
+        } else {
+          current = current === 'X' ? 'O' : 'X';
+          status.textContent = `Player ${current}'s turn`;
+          setActivePanel(current);
+        }
+      });
+    });
+
+    function resetRound() {
+      board = Array(9).fill(null);
+      gameOver = false;
+      cells.forEach(cell => {
+        cell.textContent = '';
+        cell.className = 'cell';
+      });
+      winLine.classList.remove('show');
+      status.textContent = `Player ${current}'s turn`;
+      setActivePanel(current);
+    }
+
+    restartBtn.addEventListener('click', resetRound);
+
+    newGameBtn.addEventListener('click', () => {
+      scores = { X: 0, O: 0 };
+      scoreX.textContent = 0;
+      scoreO.textContent = 0;
+      current = 'X';
+      overallWinner.classList.remove('show');
+      resetRound();
+    });
+
+    // Fox walk animation
+    const fox = document.getElementById('fox');
+    let goingRight = true;
+
+    function walkFox() {
+      fox.className = goingRight ? 'going-right' : 'going-left';
+      const duration = 8000;
+      setTimeout(() => {
+        goingRight = !goingRight;
+        walkFox();
+      }, duration);
+    }
+
+    walkFox();
+
+    // Animate legs with staggered bob
+    const legs = document.querySelectorAll('#fox .leg-back-left, #fox .leg-back-right, #fox .leg-front-left, #fox .leg-front-right');
+    legs.forEach((leg, i) => {
+      leg.style.animation = `leg-bob 0.35s ease-in-out ${i % 2 === 0 ? '0s' : '0.175s'} infinite`;
+      leg.style.transformOrigin = 'top center';
+    });
+  </script>
+</body>
+</html>

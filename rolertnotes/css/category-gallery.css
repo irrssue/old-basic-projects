@@ -1,0 +1,67 @@
+.category-gallery {
+  margin: 30px auto;
+  text-align: center;
+  border-top: 0.3px dashed rgb(124, 124, 124);
+}
+
+.category-gallery-h1 {
+  font-family: var(--Category);
+  text-transform: uppercase;
+  margin: 30px auto 0px auto;
+  font-size: 40px;
+}
+
+.category-gallery-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  min-width: 100vw;
+  height: 100px;
+}
+
+.category {
+  display: block;
+  text-decoration: none;
+  color: rgb(0, 0, 0);
+  border-color: rgba(54, 207, 54, 0.39);
+}
+
+.category:hover {
+  color: rgb(0, 0, 0);
+  background: rgba(0, 128, 0, 0.174);
+}
+
+.category {
+  padding: 10px 30px;
+  border-radius: 10px;
+}
+
+.category-tech {
+  border: 0.5px solid rgba(214, 214, 214, 0.305);
+}
+
+.category-tech:hover {
+  border: 0.5px solid rgba(214, 214, 214, 0.305);
+  background-color: rgba(214, 214, 214, 0.528);
+}
+
+.category-journal {
+  border: 0.5px solid rgba(0, 255, 0, 0.305);
+}
+
+.category-books {
+  border: 0.5px solid rgba(224, 124, 23, 0.305);
+}
+
+.category-books:hover {
+  background-color: rgba(224, 124, 23, 0.105);
+}
+
+.category-thoughts {
+  border: 0.5px solid rgba(0, 0, 255, 0.305);
+}
+
+.category-thoughts:hover {
+  background-color: rgba(0, 0, 255, 0.105);
+}

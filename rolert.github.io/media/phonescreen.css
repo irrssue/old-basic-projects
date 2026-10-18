@@ -1,0 +1,77 @@
+@media screen and (max-width: 580px) {
+
+  .root {
+    min-height: 100vh;
+  }
+
+  .navbar {
+    width: 80vw;
+    margin: 30px auto;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .navbar__logo__h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: clamp(1.5rem, 2rem, 3rem);
+  }
+
+  .dot {
+    display: none;
+  }
+
+  .navbar__item {
+    margin: auto;
+  }
+
+  .navbar__item-img {
+    width: 25px;
+    height: auto;
+  }
+
+
+  /* FOR HERO PART */
+
+
+  .hero {
+    border: none;
+    width: 90%;
+
+  }
+  .hero__profile {
+    max-width: 150px;
+    height: auto;
+  }
+  .hero__heading {
+    font-size: 1.7rem;
+  }
+
+  .hero__top {
+    margin-top: 10px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    padding-bottom: 20px;
+  }
+
+  .hero__bottom {
+    width: 83%;
+  }
+
+  .hero__bottom-text {
+    font-size: 15px;
+  }
+
+
+  /* LANDING PAGE */
+  .landing-text {
+    font-size: clamp(5rem, 7rem, 10rem);
+  }
+}

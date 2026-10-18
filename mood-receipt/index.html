@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mood receipt</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ── SCREEN 1: PICK OPTIONS ── -->
+  <div class="screen active" id="screen-pick">
+    <div class="ob-title">Mood receipt</div>
+    <div class="ob-heading">what are you<br/>into right now?</div>
+
+    <div class="options-grid">
+      <button class="opt-card" data-opt="photo" onclick="toggleOpt(this)">
+        <div class="opt-icon">📷</div>
+        <div>
+          <div class="opt-label">Photo</div>
+          <div class="opt-sub">upload an image</div>
+        </div>
+        <div class="opt-check">✓</div>
+      </button>
+
+      <button class="opt-card" data-opt="music" onclick="toggleOpt(this)">
+        <div class="opt-icon">🎵</div>
+        <div>
+          <div class="opt-label">Music</div>
+          <div class="opt-sub">youtube link</div>
+        </div>
+        <div class="opt-check">✓</div>
+      </button>
+
+      <button class="opt-card" data-opt="mood" onclick="toggleOpt(this)">
+        <div class="opt-icon">✦</div>
+        <div>
+          <div class="opt-label">Mood</div>
+          <div class="opt-sub">coming soon</div>
+        </div>
+        <div class="opt-check">✓</div>
+      </button>
+    </div>
+
+    <button class="cta-btn" id="btn-next1" onclick="goToScreen2()" disabled>
+      Next →
+    </button>
+  </div>
+
+  <!-- ── SCREEN 2: FILL IN DETAILS ── -->
+  <div class="screen" id="screen-fill">
+    <button class="ob-back" onclick="goBack()">← back</button>
+    <div class="ob-heading" style="font-size:16px; margin-bottom:24px;">add your stuff</div>
+
+    <!-- Photo section -->
+    <div class="input-section" id="fill-photo" style="display:none">
+      <span class="input-label">+ Photo</span>
+      <div class="photo-drop" id="photo-drop"
+           ondragover="e=arguments[0];e.preventDefault();this.classList.add('dragover')"
+           ondragleave="this.classList.remove('dragover')"
+           ondrop="handleDrop(arguments[0])">
+        <input type="file" accept="image/*" onchange="handleFileInput(this)" />
+        <div class="photo-drop-icon">↑</div>
+        <div class="photo-drop-text">tap to upload or drag image</div>
+      </div>
+      <img class="photo-preview" id="photo-preview" src="" alt="preview" />
+    </div>
+
+    <!-- Music section -->
+    <div class="input-section" id="fill-music" style="display:none">
+      <span class="input-label">+ Music</span>
+      <div class="yt-input-wrap">
+        <input class="yt-input" id="yt-input" type="url"
+               placeholder="https://youtube.com/watch?v=..."
+               oninput="handleYtInput(this)" />
+        <div class="yt-error" id="yt-error">not a valid youtube link</div>
+      </div>
+      <div class="yt-preview" id="yt-preview">
+        <img class="yt-thumb" id="yt-thumb" src="" alt="YouTube thumbnail" />
+        <div class="yt-meta">
+          <strong id="yt-title">—</strong>
+          <span id="yt-channel">—</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="cta-btn" id="btn-generate" onclick="generateReceipt()">
+      Generate Receipt →
+    </button>
+  </div>
+
+  <!-- ── SCREEN 3: RECEIPT ── -->
+  <div class="screen" id="screen-receipt">
+    <div class="receipt-wrap">
+      <div class="receipt">
+        <div class="header">
+          <div class="store-name">Mood receipt</div>
+          <div class="store-sub">Est. 2026 &middot; NYC</div>
+        </div>
+
+        <hr class="divider" />
+
+        <div class="meta-row">
+          <span id="r-date">—</span>
+          <span id="r-time">—</span>
+        </div>
+        <div class="meta-row">
+          <span id="r-cust">CUST #000000</span>
+          <span>REG 01</span>
+        </div>
+
+        <hr class="divider" />
+
+        <div class="mood-status">~ CURRENTLY ~</div>
+
+        <hr class="divider" />
+
+        <!-- Dynamic receipt photo -->
+        <div class="receipt-photo" id="r-photo-block" style="display:none">
+          <div class="item-category" style="margin-bottom:6px">+ Photo</div>
+          <img id="r-photo-img" src="" alt="your photo" />
+          <hr class="divider" style="margin-top:12px" />
+        </div>
+
+        <!-- Dynamic receipt music -->
+        <div class="items" id="r-music-block" style="display:none">
+          <div class="item-category">+ Listening</div>
+          <div class="music-island" id="music-island">
+            <div class="music-island-top">
+              <img class="music-island-art" id="r-music-thumb" src="" alt="" />
+              <div class="music-island-info">
+                <div class="music-island-title" id="r-music-title">—</div>
+                <div class="music-island-artist" id="r-music-channel">—</div>
+              </div>
+              <div class="music-island-waveform">
+                <span></span><span></span><span></span><span></span><span></span>
+              </div>
+            </div>
+            <div class="music-island-progress">
+              <span class="music-island-time" id="mi-cur">0:00</span>
+              <div class="music-island-bar" id="mi-bar" onclick="miSeek(event)">
+                <div class="music-island-bar-fill" id="mi-fill"></div>
+              </div>
+              <span class="music-island-time" id="mi-dur">0:00</span>
+            </div>
+            <div class="music-island-controls">
+              <button class="mi-btn" onclick="miSkip(-10)" title="−10s">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+              </button>
+              <button class="mi-btn" id="mi-play-btn" onclick="miToggle()">
+                <svg id="mi-play-icon" width="32" height="32" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                <svg id="mi-pause-icon" width="32" height="32" viewBox="0 0 24 24" fill="white" style="display:none"><path d="M6 19h4V5H6zm8-14v14h4V5z"/></svg>
+              </button>
+              <button class="mi-btn" onclick="miSkip(10)" title="+10s">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M18 6h-2v12h2zm-3.5 6L6 6v12z"/></svg>
+              </button>
+            </div>
+          </div>
+          <div id="yt-player-iframe" class="music-island-iframe"></div>
+        </div>
+
+        <hr class="divider" id="r-items-divider" style="display:none" />
+
+        <div class="total-row">
+          <span>Vibes</span>
+          <span>$0.00</span>
+        </div>
+
+        <hr class="divider" />
+
+        <div class="barcode-wrap">
+          <div class="barcode"></div>
+          <div class="barcode-num" id="r-barcode-num">9 000000 000000</div>
+        </div>
+
+        <div class="footer">
+          <div class="footer-main">Thank you for being you</div>
+          <div class="footer-sub">@moodshelf &middot; moodshelf.app</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="receipt-restart" onclick="restart()">↺ make another</button>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+
+.first {
+  background-image: url(../blogs/whomovedmycheese/whomovedmycheese.jpg);
+}
+
+.second {
+  background-image: url(../blogs/willaitakeoverjob/willaitakeoverjobs.png);
+}
+
+.third {
+  background-image: url(../blogs/moneythegreatestdeception/moneythegreatestdeception.jpg);
+}
+
+
+/* ************************************* */
+
+.blog-gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.blog {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.image-container {
+  width: 200px;
+  height: 200px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.blog-gallery-h1 {
+  font-size: 23px;
+  font-family: var(--Header);
+  margin: 20px 30px 6px 30px;
+}
+
+.blog-gallery-p {
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.845);
+
+  padding: 30px;
+  font-family: var(--Body);
+}
+
+.blog-gallery-img {
+  max-height: 170px;
+  width: auto;
+  margin: 0 auto;
+}

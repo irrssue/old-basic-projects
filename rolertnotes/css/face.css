@@ -1,0 +1,138 @@
+.face {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 50px auto;
+  height: 70vh;
+}
+
+.face-img {
+  width: 80%;
+  height: 80%;
+  margin: auto;
+
+  border-radius: 10px;
+
+  background-image: url(../blogs/whatmoneycantbuy/whatmoneycantbuy.jpeg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.face-body {
+
+  text-align: center;
+  margin: auto 30px;
+  padding: 60px 20px;
+
+  border-radius: 30px;
+
+  /* background: rgba(225, 225, 225, 0.224); */
+
+  border-right: 0.5px dashed black;
+  border-top:0.5px dashed black;
+  border-bottom: 0.5px dashed black;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+
+.face-body-h1 {
+  word-spacing: 3px;
+  font-family: var(--Header);
+}
+
+.face-body-p {
+  padding: 20px;
+  word-spacing: 2px;
+  color: rgba(0, 0, 0, 0.658);
+}
+
+.date {
+  display: block;
+  padding-top: 25px;
+  text-transform: uppercase;
+  color: rgb(61, 61, 61);
+}
+
+.read-btn {
+  margin-top: 50px;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: black;
+  background: white;
+  padding: 10px 40px;
+  border-radius: 20px;
+  border: 0.2px solid black;
+}
+
+.read-btn:hover {
+  color: white;
+  background: black;
+}
+
+@media screen and (max-width: 850px) {
+  .face {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 20px auto;
+  }
+
+  .face-img {
+    width: 50%;
+    height: 50%;
+  }
+
+  .face-body {
+    border-top: 0.2px solid rgb(121, 121, 121);
+    margin: 10px auto;
+    background: none;
+
+    margin: auto 16px;
+
+    border-bottom: 0.2px solid rgb(121, 121, 121);
+  }
+
+  .face-body-p {
+    font-size: 20px;
+  }
+  .face-body-h1 {
+    font-size: 23px;
+  }
+}
+
+@media screen and (max-width: 520px) {
+  .logo-text {
+    font-size: 50px;
+  }
+  .nav-list {
+    margin: 5px auto;
+  }
+  .nav-icon {
+    max-width: 23px;
+  }
+
+  .face-img {
+    width: 40%;
+    height: 40%;
+    margin: 10px auto;
+  }
+  .face-body-h1 {
+    font-size: 20px;
+    margin: 10px;
+  }
+  
+  .face-body-p {
+    padding: 5px;
+    font-size: 15px;
+  }
+
+  .btn-dark {
+    margin-top: 10px;
+  }
+
+  .face-body {
+    margin: 10px auto;
+    padding: 10px 10px;
+    text-align: center;
+  }
+}
