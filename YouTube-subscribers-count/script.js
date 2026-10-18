@@ -1,5 +1,5 @@
 // Replace with your actual API key
-const API_KEY = 'AIzaSyCGiPbtlRFORcpejuZR2JfhmmltZh-yD5E';
+const API_KEY = 'YOUR_YOUTUBE_API_KEY';
 
 function submitUsername() {
   const username = document.getElementById('channel-username').value.trim().replace('@', '');
